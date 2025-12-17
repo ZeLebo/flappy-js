@@ -10,6 +10,13 @@ setInterval(() => !gameover && pipes.spawn(), 2000);
 function updateScoreDisplay() {
     scoreEl.textContent = score;
 }
+function adjustDifficulty() {
+    if (score >= 19) {
+        pipes.forceGap(150);
+    } else {
+        pipes.releaseGap();
+    }
+}
 function endGame() {
     gameover = true;
     const go = document.getElementById("gameover");
@@ -39,12 +46,14 @@ function checkCollision(bird, pipes) {
             p.bottom.style.background = "red";
             score -= 1;
             updateScoreDisplay();
+            adjustDifficulty();
         }
         const pipeRightX = topRect.right;
         if (!p.passed && !p.collided && pipeRightX < birdX) {
             p.passed = true;
             score += 1;
             updateScoreDisplay();
+            adjustDifficulty();
         }
     });
     if (score >= 20 && !gameover) {
@@ -60,4 +69,5 @@ function loop() {
     requestAnimationFrame(loop);
 }
 updateScoreDisplay();
+adjustDifficulty();
 loop();
